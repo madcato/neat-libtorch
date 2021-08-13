@@ -1,5 +1,7 @@
 # neat-compute
-C++ NEAT implementation using Boost.Compute
+C++ NEAT implementation using LibTorch.
+
+This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://github.com/ddehueck/pytorch-neat).
 
 ## Documentation
 
