@@ -7,7 +7,6 @@ This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://git
 
 ### LibTorch
 - [PyTorch C++ API Docs](https://pytorch.org/cppdocs/)
-- [Library API](https://pytorch.org/cppdocs/api/library_root.html)
 - [Using the PyTorch C++ frontend](https://pytorch.org/tutorials/advanced/cpp_frontend.html)
 - [Index](https://pytorch.org/cppdocs/genindex.html)
 - [Tensor indexing](https://pytorch.org/cppdocs/notes/tensor_indexing.html)
@@ -18,7 +17,6 @@ This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://git
 - [Loading a torchscript model in C++](https://pytorch.org/tutorials/advanced/cpp_export.html#depending-on-libtorch-and-building-the-application) (_optional_)
 - [Follow this post to build only libtorch](https://discuss.pytorch.org/t/compile-libtorch-c-api-from-source/81624/2) (_optional_)
 - [libtorch (C++-only) -> Building libtorch](https://github.com/pytorch/pytorch/blob/master/docs/libtorch.rst) (_optional_)
-
 
 ## Requirements
 

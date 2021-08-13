@@ -1,9 +1,5 @@
 #include <iostream>
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdocumentation"
-#pragma GCC diagnostic ignored "-Wcomma"
 #include <torch/torch.h>
-#pragma GCC diagnostic pop
 
 int main()
 {

@@ -27,7 +27,9 @@ endif()
 
 # Main executable
 add_executable(neat-libtorch neat/main.cpp
-                             neat/activations.cpp)
+                             neat/activations.cpp
+                             neat/unit.cpp
+                             neat/genotype/node_gene.cpp)
 target_link_libraries(neat-libtorch "${TORCH_LIBRARIES}")
 set_property(TARGET neat-libtorch PROPERTY CXX_STANDARD 14)
 

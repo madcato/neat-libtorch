@@ -1,8 +1,6 @@
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdocumentation"
-#pragma GCC diagnostic ignored "-Wcomma"
+#include <map>
+#include <string>
 #include <torch/torch.h>
-#pragma GCC diagnostic pop
 
 #include "activations.hpp"
 
