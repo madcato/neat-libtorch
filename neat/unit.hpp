@@ -1,9 +1,10 @@
 #ifndef UNIT_HPP_
 #define UNIT_HPP_
 
-#include "genotype/node_gene.hpp"
+#include <string>
+#include <torch/torch.h>
 
-using namespace std;
+#include "neat/genotype/node_gene.hpp"
 
 class Unit: public torch::nn::Module {
     Unit(const NodeGene& ref_node, size_t num_in_features);
@@ -12,7 +13,7 @@ class Unit: public torch::nn::Module {
 
     torch::nn::Linear build_linear(size_t num_in_features);
 
-    string str();
+    std::string str();
 
 private:
     NodeGene ref_node;

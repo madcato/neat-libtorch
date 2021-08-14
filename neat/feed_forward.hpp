@@ -1,7 +1,9 @@
 #ifndef FEED_FORWARD_HPP_
 #define FEED_FORWARD_HPP_
 
-class FeedForward {
+#include <torch/torch.h>
+
+class FeedForward: public torch::nn::Module  {
 
 };
 

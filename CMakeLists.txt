@@ -25,6 +25,8 @@ if(CUDA_FOUND)
   add_definitions(-DCUDA_LIB_AVAILABLE)
 endif()
 
+include_directories(${CMAKE_SOURCE_DIR})
+
 # Main executable
 add_executable(neat-libtorch neat/main.cpp
                              neat/activations.cpp
