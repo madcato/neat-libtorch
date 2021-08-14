@@ -1,5 +1,6 @@
 #include "neat/utils.hpp"
 
+#include <cstdlib>
 #include <torch/torch.h>
 
 float rand_uni_val() {
@@ -8,4 +9,8 @@ float rand_uni_val() {
 
 bool rand_bool() {
     return rand_uni_val() <= 0.5;
+}
+
+int rand(int min, int max) {
+    return min + (std::rand() % static_cast<int>(max - min + 1));
 }

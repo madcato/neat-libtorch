@@ -2,24 +2,62 @@
 #define GENOME_HPP_
 
 #include <vector>
+#include <torch/torch.h>
 
 #include "neat/unit.hpp"
 #include "neat/genotype/connection_gene.hpp"
+#include "neat/genotype/node_gene.hpp"
 
 class Genome {
 public:
+    Genome(const torch::Device& device);
+
+    void add_connection_mutation();
+
+    void add_node_mutation();
+
+    void add_connection_gene(int node_in_id, int node_out_id, bool is_enable = true, float* weight = nullptr);
+
+    NodeGene add_node_gene(std::string n_type);
+
+    void add_connection_copy(const ConnectionGene& copy);
+
+    void add_node_copy(const NodeGene& copy);
+
+    std::vector<ConnectionGene> get_connections_in(int node_id);
+
     std::vector<Unit> order_units(const std::vector<Unit>& units);
 
     std::vector<NodeGene> get_outputs(const NodeGene& node, const std::vector<NodeGene>& nodes);
 
-private:
-    std::vector<NodeGene> _order_units(const NodeGene& node, 
-                                   std::vector<NodeGene>& nodes,
-                                   std::vector<NodeGene>& ordered,
-                                   std::set<NodeGene>& visited);
+    std::string str();
 
+private:
+    int _get_rand_node_id();
+
+    ConnectionGene _get_rand_connection_gene();
+
+    std::vector<ConnectionGene> _get_connections_out(int node_id);
+
+    bool creates_cycle(int node_in_id, int node_out_id);
+
+    bool _is_valid_connection(int node_in_id, int node_out_id);
+
+    bool _does_connection_exist(int node_1_id, int node_2_id);
+
+    void _order_units(const NodeGene& node, 
+                      std::vector<NodeGene>& nodes,
+                      std::vector<NodeGene>& ordered,
+                      std::set<NodeGene>& visited);
 
     std::vector<ConnectionGene> connection_genes;
+    std::vector<NodeGene> node_genes;
+    std::set<int> node_ids;
+    std::set<int> innov_nums;
+    // std::function<int> fitness;
+    // std::function<int> adjusted_fitness;
+    // species
+    torch::Device device;
 };
 
 #endif  // GENOME_HPP_

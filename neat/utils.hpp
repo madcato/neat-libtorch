@@ -3,6 +3,8 @@
 
 float rand_uni_val();
 bool rand_bool();
+int rand(int min, int max);
+
 // TODO: implement it
 // def get_best_genome(population):
 //     """
