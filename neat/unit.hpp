@@ -7,6 +7,7 @@
 #include "neat/genotype/node_gene.hpp"
 
 class Unit: public torch::nn::Module {
+public:
     Unit(const NodeGene& ref_node, size_t num_in_features);
 
     void set_weights(const torch::Tensor& weights);
@@ -15,7 +16,6 @@ class Unit: public torch::nn::Module {
 
     std::string str();
 
-private:
     NodeGene ref_node;
     torch::nn::Linear linear = nullptr;
 };

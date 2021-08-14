@@ -11,6 +11,6 @@ Activations::Activations() {
     functions = function_list;
 }
 
-auto Activations::get(std::string func_name) {
+std::function<torch::Tensor(const torch::Tensor &)> Activations::get(std::string func_name) {
     return functions[func_name];
 }

@@ -7,6 +7,10 @@ class NodeGene {
 public:
     NodeGene(int node_id, std::string node_type);
 
+    bool operator==(const NodeGene& other) const;
+    
+    bool operator<(const NodeGene& other) const;
+
     std::string str();
 
     int id;

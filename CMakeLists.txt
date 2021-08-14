@@ -30,8 +30,13 @@ include_directories(${CMAKE_SOURCE_DIR})
 # Main executable
 add_executable(neat-libtorch neat/main.cpp
                              neat/activations.cpp
+                             neat/mutation.cpp
                              neat/unit.cpp
-                             neat/genotype/node_gene.cpp)
+                             neat/utils.cpp
+                             neat/genotype/connection_gene.cpp
+                             neat/genotype/genome.cpp
+                             neat/genotype/node_gene.cpp
+                             neat/phenotype/feed_forward.cpp)
 target_link_libraries(neat-libtorch "${TORCH_LIBRARIES}")
 set_property(TARGET neat-libtorch PROPERTY CXX_STANDARD 14)
 

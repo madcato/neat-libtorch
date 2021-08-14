@@ -6,9 +6,10 @@
 #include <torch/torch.h>
 
 class Activations {
+public:
     Activations();
 
-    auto get(std::string func_name);
+    std::function<torch::Tensor(const torch::Tensor&)> get(std::string func_name);
 
 private:
     std::map<std::string, std::function<torch::Tensor(const torch::Tensor&)>> functions;

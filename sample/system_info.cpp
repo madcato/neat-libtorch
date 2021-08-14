@@ -4,17 +4,14 @@
 #include <thread>
 #include <vector>
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdocumentation"
-#pragma GCC diagnostic ignored "-Wcomma"
 #include <torch/torch.h>
 #ifdef CUDA_LIB_AVAILABLE
 #include "cuda_runtime_api.h"
 #endif  // CUDA_LIB_AVAILABLE
-#pragma GCC diagnostic pop
 
-int main()
-{
+#include "neat/utils.hpp"
+
+int main() {
     std::cout << std::endl;
 
     std::cout << "PyTorch version: "

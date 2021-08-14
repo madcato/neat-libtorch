@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - feed_forward.cpp
 - unit.cpp
 - node_gene.cpp
+- connection_gene.cpp
+- util.cpp
+- config.cpp
+- genome.cpp
 
 ## [0.1.0] - 2021-08-12
 ### Added
