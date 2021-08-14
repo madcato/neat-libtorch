@@ -41,7 +41,6 @@ target_link_libraries(neat-libtorch "${TORCH_LIBRARIES}")
 set_property(TARGET neat-libtorch PROPERTY CXX_STANDARD 14)
 
 # System Information
-add_executable(system-info sample/system_info.cpp
-                           neat/utils.cpp)
+add_executable(system-info sample/system_info.cpp)
 target_link_libraries(system-info "${TORCH_LIBRARIES}")
 set_property(TARGET system-info PROPERTY CXX_STANDARD 14)

@@ -1,5 +1,6 @@
 #include "neat/genotype/genome.hpp"
 
+#include <algorithm>
 #include <set>
 
 #include "neat/utils.hpp"
@@ -27,11 +28,120 @@ void Genome::add_connection_mutation() {
 
 void Genome::add_node_mutation() {
     NodeGene new_node = add_node_gene("hidden");
-    ConnectionGene existing_connection = _get_rand_connection_gene();
+    ConnectionGene* existing_connection = _get_rand_connection_gene();
 
     int weight = 1;
-    add_connection_gene(existing_connection.in_node_id, new_node.id, &weight);
-    add_connection_gene(new_node.id, existing_connection.out_node_id, &(existing_connection.weight));
+    add_connection_gene(existing_connection->in_node_id, new_node.id, &weight);
+    add_connection_gene(new_node.id, existing_connection->out_node_id, &(existing_connection->weight));
+
+    existing_connection->is_enabled = false;
+}
+
+int Genome::get_num_excess_genes(Genome& other) {
+    int num_excess = 0;
+
+    int max_innov_num = -1;
+    for(auto it = other.innov_nums.begin() ; it != other.innov_nums.end() ; it++) {
+        max_innov_num = std::max(*it, max_innov_num);
+    }
+    for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
+        if (c_gene->innov_num > max_innov_num) {
+            num_excess += 1;
+        }
+    }
+
+    int max_node_id = -1;
+    for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
+        max_node_id = std::max(it->id, max_node_id);
+    }
+    for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
+        if (n->id > max_node_id) {
+            num_excess += 1;
+        }
+    }
+
+    return num_excess;
+}
+
+int Genome::get_num_disjoint_genes(Genome& other) {
+    int num_disjoint = 0;
+
+    int max_innov_num = -1;
+    for(auto it = other.innov_nums.begin() ; it != other.innov_nums.end() ; it++) {
+        max_innov_num = std::max(*it, max_innov_num);
+    }
+    
+    for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
+        if (c_gene->innov_num <= max_innov_num) {
+            if (other.get_connect_gene(c_gene->innov_num) == nullptr) {
+                num_disjoint += 1;
+            }
+        }
+    }
+
+    int max_node_id = -1;
+    for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
+        max_node_id = std::max(it->id, max_node_id);
+    }
+
+    for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
+        if (n->id <= max_node_id) {
+            if (other.get_node_gene(n->id) == nullptr) {
+                num_disjoint += 1;
+            }
+        }
+    }
+
+    return num_disjoint;
+}
+
+ConnectionGene* Genome::get_connect_gene(int innov_num) {
+    for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
+        if (c_gene->innov_num == innov_num) {
+            return &(*c_gene);
+        }
+    }
+return nullptr;
+}
+
+NodeGene* Genome::get_node_gene(int id) {
+    for(auto n = node_genes.begin() ; n != node_genes.end() ; n++) {
+        if (n->id == id) {
+            return &(*n);
+        }
+    }
+
+    return nullptr;
+}
+
+float Genome::get_avg_weight_difference(Genome& other) {
+    float weight_difference = 0.0;
+    float num_weights = 0.0;
+
+    for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
+        ConnectionGene* matching_gene = other.get_connect_gene(c_gene->innov_num);
+        if (matching_gene != nullptr) {
+            weight_difference += c_gene->weight[0].item<float>() - matching_gene->weight[0].item<float>();
+            num_weights += 1.0;
+        }
+    }
+
+    if (num_weights == 0.0) {
+        num_weights = 1.0;
+    }
+
+    return weight_difference / num_weights;
+}
+
+std::vector<int> Genome::get_inputs_ids(int node_id) {
+    std::vector<int> node_input_ids;
+    for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
+        if (c_gene->out_node_id == node_id && c_gene->is_enabled) {
+            node_input_ids.push_back(c_gene->in_node_id);
+        }
+    }
+
+    return node_input_ids;
 }
 
 void Genome::add_connection_gene(int node_in_id, int node_out_id, bool is_enable, float* weight) {
@@ -81,9 +191,9 @@ int Genome::_get_rand_node_id() {
     return *it;
 }
 
-ConnectionGene Genome::_get_rand_connection_gene() {
+ConnectionGene* Genome::_get_rand_connection_gene() {
     size_t size = connection_genes.size();
-    return connection_genes[rand(0, size)];
+    return &connection_genes[rand(0, size)];
 }
 
 std::vector<ConnectionGene> Genome::_get_connections_out(int node_id) {

@@ -19,6 +19,19 @@ torch::Tensor FeedForward::forward(torch::Tensor x) {
     std::vector<Unit> bias_units;
     std::copy_if (units.begin(), units.end(), std::back_inserter(output_units), [](Unit unit) { return unit.ref_node.type == "bias"; });
     std::vector<Unit> stacked_units = genome.order_units(units);
+
+    for(auto u = input_units.begin(); u != input_units.end() ; u++) {
+        outputs[u->ref_node.id] = x[0][u->ref_node.id];
+    }
+
+    while (stacked_units.size() > 0) {
+        Unit current_unit = stacked_units.back();
+        stacked_units.pop_back();
+
+        if (current_unit.ref_node.type != "input" && current_unit.ref_node.type != "bias") {
+            // inputs_ids = genome.get_inputs_ids(current_unit.ref_node.id);
+        }
+    }
 }
 
 std::vector<Unit> FeedForward::build_units() {

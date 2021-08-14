@@ -16,6 +16,18 @@ public:
 
     void add_node_mutation();
 
+    int get_num_excess_genes(Genome& other);
+
+    int get_num_disjoint_genes(Genome& other);
+
+    ConnectionGene* get_connect_gene(int innov_num);
+
+    NodeGene* get_node_gene(int id);
+
+    float get_avg_weight_difference(Genome& other);
+
+    std::vector<int> get_inputs_ids(int node_id);
+
     void add_connection_gene(int node_in_id, int node_out_id, bool is_enable = true, float* weight = nullptr);
 
     NodeGene add_node_gene(std::string n_type);
@@ -35,7 +47,7 @@ public:
 private:
     int _get_rand_node_id();
 
-    ConnectionGene _get_rand_connection_gene();
+    ConnectionGene* _get_rand_connection_gene();
 
     std::vector<ConnectionGene> _get_connections_out(int node_id);
 

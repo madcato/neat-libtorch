@@ -9,8 +9,6 @@
 #include "cuda_runtime_api.h"
 #endif  // CUDA_LIB_AVAILABLE
 
-#include "neat/utils.hpp"
-
 int main() {
     std::cout << std::endl;
 
