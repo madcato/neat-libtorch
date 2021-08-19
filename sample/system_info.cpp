@@ -58,9 +58,9 @@ int main() {
     const auto processor_count = std::thread::hardware_concurrency();
 
     if (processor_count == 0) {
-        std::cout << "Unable to detect number of cores";
+        std::cout << "Unable to detect number of threads";
     } else {
-        std::cout << "Number of cores: " << processor_count << std::endl;
+        std::cout << "Number of threads: " << processor_count << std::endl;
     }
 
     // System memory
