@@ -9,9 +9,9 @@
 #include "neat/experiments/config.hpp"
 #include "neat/genotype/genome.hpp"
 
-class FeedForward: public torch::nn::Module  {
+class FeedForwardImpl: public torch::nn::Module  {
 public:
-    FeedForward(const Genome& genome,  std::shared_ptr<Config> config);
+    FeedForwardImpl(const Genome& genome,  std::shared_ptr<Config> config);
 
     torch::Tensor forward(torch::Tensor x);
 
@@ -24,5 +24,7 @@ private:
     std::shared_ptr<Config> config;
     std::function<torch::Tensor(const torch::Tensor&)> activation;
 };
+
+TORCH_MODULE(FeedForward);
 
 #endif  // FEED_FORWARD_HPP_

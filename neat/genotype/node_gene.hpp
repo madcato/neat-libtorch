@@ -3,13 +3,17 @@
 
 #include <string>
 
-class NodeGene {
-public:
-    NodeGene(int node_id, std::string node_type);
+#include "neat/shared_helper.hpp"
 
-    bool operator==(const NodeGene& other) const;
+class NodeGeneImpl {
+public:
+    NodeGeneImpl();
+
+    NodeGeneImpl(int node_id, std::string node_type);
+
+    bool operator==(const NodeGeneImpl& other) const;
     
-    bool operator<(const NodeGene& other) const;
+    bool operator<(const NodeGeneImpl& other) const;
 
     std::string str();
 
@@ -17,5 +21,7 @@ public:
     std::string type;
     void* unit;
 };
+
+SHARED_HELPER(NodeGene);
 
 #endif  // NODE_GENE_HPP_

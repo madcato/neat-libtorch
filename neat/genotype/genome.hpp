@@ -22,7 +22,7 @@ public:
 
     ConnectionGene* get_connect_gene(int innov_num);
 
-    NodeGene* get_node_gene(int id);
+    NodeGene get_node_gene(int id);
 
     float get_avg_weight_difference(Genome& other);
 
@@ -38,7 +38,7 @@ public:
 
     std::vector<ConnectionGene> get_connections_in(int node_id);
 
-    std::vector<Unit> order_units(const std::vector<Unit>& units);
+    std::vector<Unit> order_units(std::vector<Unit>& units);
 
     std::vector<NodeGene> get_outputs(const NodeGene& node, const std::vector<NodeGene>& nodes);
 

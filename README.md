@@ -1,7 +1,5 @@
 # neat-libtorch
 
-THIS PROJECT IS NOT FINISHED AND ABANDONDE. KEPT AS EXAMPLE OF CMAKE BUILD SYSTEM.
-
 C++ NEAT implementation using LibTorch.
 
 This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://github.com/ddehueck/pytorch-neat).

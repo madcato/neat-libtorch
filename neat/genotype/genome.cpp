@@ -10,15 +10,15 @@ Genome::Genome(const torch::Device& device):device(device) {
 
 void Genome::add_connection_mutation() {
     std::vector<NodeGene> potential_inputs;
-    std::copy_if (node_genes.begin(), node_genes.end(), std::back_inserter(potential_inputs), [](NodeGene node) { return node.type != "output"; });
+    std::copy_if (node_genes.begin(), node_genes.end(), std::back_inserter(potential_inputs), [](NodeGene node) { return node->type != "output"; });
     std::vector<NodeGene> potential_outputs;
-    std::copy_if (node_genes.begin(), node_genes.end(), std::back_inserter(potential_outputs), [](NodeGene node) { return node.type != "imput" && node.type != "bias"; });
+    std::copy_if (node_genes.begin(), node_genes.end(), std::back_inserter(potential_outputs), [](NodeGene node) { return node->type != "imput" && node->type != "bias"; });
 
     size_t po_size = potential_outputs.size();
     size_t pi_size = potential_inputs.size();
     if ( po_size != 0 && pi_size != 0) {
-        int node_in_id = potential_inputs[rand(0, pi_size)].id;
-        int node_out_id = potential_inputs[rand(0, po_size)].id;
+        int node_in_id = potential_inputs[rand(0, pi_size)]->id;
+        int node_out_id = potential_inputs[rand(0, po_size)]->id;
 
         if (_is_valid_connection(node_in_id, node_out_id)) {
             add_connection_gene(node_in_id, node_out_id);
@@ -31,8 +31,8 @@ void Genome::add_node_mutation() {
     ConnectionGene* existing_connection = _get_rand_connection_gene();
 
     int weight = 1;
-    add_connection_gene(existing_connection->in_node_id, new_node.id, &weight);
-    add_connection_gene(new_node.id, existing_connection->out_node_id, &(existing_connection->weight));
+    add_connection_gene(existing_connection->in_node_id, new_node->id, &weight);
+    add_connection_gene(new_node->id, existing_connection->out_node_id, &(existing_connection->weight));
 
     existing_connection->is_enabled = false;
 }
@@ -52,10 +52,10 @@ int Genome::get_num_excess_genes(Genome& other) {
 
     int max_node_id = -1;
     for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
-        max_node_id = std::max(it->id, max_node_id);
+        max_node_id = std::max((*it)->id, max_node_id);
     }
     for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
-        if (n->id > max_node_id) {
+        if ((*n)->id > max_node_id) {
             num_excess += 1;
         }
     }
@@ -81,12 +81,12 @@ int Genome::get_num_disjoint_genes(Genome& other) {
 
     int max_node_id = -1;
     for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
-        max_node_id = std::max(it->id, max_node_id);
+        max_node_id = std::max((*it)->id, max_node_id);
     }
 
     for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
-        if (n->id <= max_node_id) {
-            if (other.get_node_gene(n->id) == nullptr) {
+        if ((*n)->id <= max_node_id) {
+            if (other.get_node_gene((*n)->id).is_empty()) {
                 num_disjoint += 1;
             }
         }
@@ -104,14 +104,14 @@ ConnectionGene* Genome::get_connect_gene(int innov_num) {
 return nullptr;
 }
 
-NodeGene* Genome::get_node_gene(int id) {
+NodeGene Genome::get_node_gene(int id) {
     for(auto n = node_genes.begin() ; n != node_genes.end() ; n++) {
-        if (n->id == id) {
-            return &(*n);
+        if ((*n)->id == id) {
+            return *n;
         }
     }
 
-    return nullptr;
+    return NodeGene();  // nullptr
 }
 
 float Genome::get_avg_weight_difference(Genome& other) {
@@ -159,7 +159,7 @@ void Genome::add_connection_gene(int node_in_id, int node_out_id, bool is_enable
 
 NodeGene Genome::add_node_gene(std::string n_type) {
     int new_id = node_genes.size();
-    NodeGene new_gene(new_id, n_type);
+    NodeGene new_gene(new NodeGeneImpl(new_id, n_type));
     node_genes.push_back(new_gene);
     return new_gene; 
 }
@@ -176,7 +176,7 @@ void Genome::add_connection_copy(const ConnectionGene& copy) {
 }
 
 void Genome::add_node_copy(const NodeGene& copy) {
-    node_genes.push_back(NodeGene(copy.id, copy.type));
+    node_genes.push_back(NodeGene(new NodeGeneImpl(copy->id, copy->type)));
 }
 
 std::vector<ConnectionGene> Genome::get_connections_in(int node_id) {
@@ -247,18 +247,18 @@ bool Genome::_does_connection_exist(int node_1_id, int node_2_id) {
 
 std::vector<NodeGene> Genome::get_outputs(const NodeGene& node, const std::vector<NodeGene>& nodes) {
     std::vector<ConnectionGene> temp_genes;
-    std::copy_if(connection_genes.begin(), connection_genes.end(), std::back_inserter(temp_genes), [&node](const ConnectionGene& c) { return (c.in_node_id == node.id && c.is_enabled); });
+    std::copy_if(connection_genes.begin(), connection_genes.end(), std::back_inserter(temp_genes), [&node](const ConnectionGene& c) { return (c.in_node_id == node->id && c.is_enabled); });
     std::set<int> out_ids;
     transform(temp_genes.begin(), temp_genes.end(), inserter(out_ids, out_ids.begin()), [](const ConnectionGene& gene) { return gene.out_node_id; });
 
     std::vector<NodeGene> temp_nodes;
-    std::copy_if(nodes.begin(), nodes.end(), std::back_inserter(temp_nodes), [&out_ids](const NodeGene& unit) { return out_ids.find(unit.id) != out_ids.end(); });
+    std::copy_if(nodes.begin(), nodes.end(), std::back_inserter(temp_nodes), [&out_ids](const NodeGene& unit) { return out_ids.find(unit->id) != out_ids.end(); });
     return temp_nodes;
 }
 
-std::vector<Unit> Genome::order_units(const std::vector<Unit>& units) {
+std::vector<Unit> Genome::order_units(std::vector<Unit>& units) {
     std::vector<NodeGene> nodes;
-    transform(units.begin(), units.end(), back_inserter(nodes), [](const Unit& unit) { return unit.ref_node; });
+    transform(units.begin(), units.end(), back_inserter(nodes), [](const Unit& unit) { return unit->ref_node; });
     std::set<NodeGene> visited;
     std::vector<NodeGene> ordered;
 
@@ -271,7 +271,7 @@ std::vector<Unit> Genome::order_units(const std::vector<Unit>& units) {
     std::vector<Unit> ordered_units;
     for(auto it_n = ordered.begin() ; it_n != ordered.end() ; it_n++) {
         for(auto it_u = units.begin() ; it_u != units.end() ; it_u++) {
-            if (it_u->ref_node == *it_n) {
+            if ((*it_u)->ref_node == *it_n) {
                 ordered_units.push_back(*it_u);
             }
         }
@@ -303,7 +303,7 @@ std::string Genome::str() {
 
     ret += "Nodes: \n\n";
     for(auto n_gene = node_genes.begin() ; n_gene != node_genes.end() ; n_gene++) {
-        ret += n_gene->str() + "\n";
+        ret += (*n_gene)->str() + "\n";
     }
 
     return ret;
