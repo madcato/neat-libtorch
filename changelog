@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - util.cpp
 - config.cpp
 - genome.cpp
+- mutation.cpp
+- shared_helper.cpp
+- crossover.cpp
 
 ## [0.1.0] - 2021-08-12
 ### Added
