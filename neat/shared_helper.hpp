@@ -94,8 +94,6 @@ class ObjectHolder {
         return *impl_ < *other;
     }
 
-friend class ObjectHolder;
-
 private:
     /// In C++17, the two methods below could be written as the following:
     /// if constexpr (std::is_default_constructible_v<Contained>) {
