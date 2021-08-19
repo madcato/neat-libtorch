@@ -26,7 +26,7 @@ int main() {
 #ifdef CUDA_LIB_AVAILABLE
         for(size_t i = 0 ; i < torch::cuda::device_count() ; i++) {
             cudaDeviceProp prop;
-            if (cudaSuccess == cudaGetDeviceProperties(&prop, device)) {
+            if (cudaSuccess == cudaGetDeviceProperties(&prop, i)) {
                 std::cout << "Device " << dev << " name: " << deviceProp.name << std::endl;
                 std::cout << " Computational Capabilities: " << deviceProp.major << "." << deviceProp.minor << std::endl;
                 std::cout << " Maximum global memory size: " << deviceProp.totalGlobalMem << std::endl;
