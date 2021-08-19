@@ -43,4 +43,7 @@ set_property(TARGET neat-libtorch PROPERTY CXX_STANDARD 14)
 # System Information
 add_executable(system-info sample/system_info.cpp)
 target_link_libraries(system-info "${TORCH_LIBRARIES}")
+if(CUDA_FOUND)
+  target_link_libraries(system-info "${CUDA_LIBRARIES}")
+endif()
 set_property(TARGET system-info PROPERTY CXX_STANDARD 14)
