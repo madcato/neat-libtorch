@@ -1,6 +1,5 @@
 #include <iostream>
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#include <unistd.h>
 #include <thread>
 #include <vector>
 
@@ -25,22 +24,23 @@ int main() {
         device = torch::kCUDA;
 #ifdef CUDA_LIB_AVAILABLE
         for(size_t i = 0 ; i < torch::cuda::device_count() ; i++) {
-            cudaDeviceProp prop;
-            if (cudaSuccess == cudaGetDeviceProperties(&prop, i)) {
-                std::cout << "Device " << dev << " name: " << deviceProp.name << std::endl;
+            cudaDeviceProp deviceProp;
+            if (cudaSuccess == cudaGetDeviceProperties(&deviceProp, i)) {
+                std::cout << "Device " << i << " name: " << deviceProp.name << std::endl;
                 std::cout << " Computational Capabilities: " << deviceProp.major << "." << deviceProp.minor << std::endl;
                 std::cout << " Maximum global memory size: " << deviceProp.totalGlobalMem << std::endl;
                 std::cout << " Maximum constant memory size: " << deviceProp.totalConstMem << std::endl;
                 std::cout << " Maximum shared memory size per block: " << deviceProp.sharedMemPerBlock << std::endl;
                 std::cout << " Maximum block dimensions: " << deviceProp.maxThreadsDim[0] << " x " <<
                                                               deviceProp.maxThreadsDim[1] << " x " <<
-                                                              deviceProp.maxThreadsDim[2]) << std::endl;
+                                                              deviceProp.maxThreadsDim[2] << std::endl;
                 std::cout << " Maximum grid dimensions: " << deviceProp.maxGridSize[0] << " x " <<
                                                              deviceProp.maxGridSize[1] << " x " <<
                                                              deviceProp.maxGridSize[2] << std::endl;
                 std::cout << " Warp size: " << deviceProp.warpSize << std::endl;
                 std::cout << std::endl;
-        }            
+            }
+        }
 #endif  // CUDA_AVAILABLE
     } else {
         std::cout << "CUDA not available" << std::endl;
@@ -64,18 +64,10 @@ int main() {
     }
 
     // System memory
-    // This works on macOS
-    int mib[2];
-    int64_t physical_memory;
-    size_t length;
-
-    // Get the Physical memory size
-    mib[0] = CTL_HW;
-    mib[1] = HW_MEMSIZE;
-    length = sizeof(int64_t);
-    sysctl(mib, 2, &physical_memory, &length, NULL, 0);
-
-    std::cout << "Physical memory: " << physical_memory / (1024*1024*1024) << "TB" << std::endl;
+    long pages = sysconf(_SC_PHYS_PAGES);
+    long page_size = sysconf(_SC_PAGE_SIZE);
+    long physical_memory = pages * page_size;
+    std::cout << "Physical memory: " << physical_memory / (1024*1024*1024) << "GB" << std::endl;
 
     return 0;
 }
