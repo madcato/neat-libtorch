@@ -8,23 +8,25 @@
 #include "neat/genotype/connection_gene.hpp"
 #include "neat/genotype/node_gene.hpp"
 
-class Genome {
+class GenomeImpl {
 public:
-    Genome(const torch::Device& device);
+    GenomeImpl();
+
+    GenomeImpl(const torch::Device& device);
 
     void add_connection_mutation();
 
     void add_node_mutation();
 
-    int get_num_excess_genes(Genome& other);
+    int get_num_excess_genes(GenomeImpl& other);
 
-    int get_num_disjoint_genes(Genome& other);
+    int get_num_disjoint_genes(GenomeImpl& other);
 
-    ConnectionGene* get_connect_gene(int innov_num);
+    ConnectionGene get_connect_gene(int innov_num);
 
     NodeGene get_node_gene(int id);
 
-    float get_avg_weight_difference(Genome& other);
+    float get_avg_weight_difference(GenomeImpl& other);
 
     std::vector<int> get_inputs_ids(int node_id);
 
@@ -44,10 +46,9 @@ public:
 
     std::string str();
 
-private:
     int _get_rand_node_id();
 
-    ConnectionGene* _get_rand_connection_gene();
+    ConnectionGene _get_rand_connection_gene();
 
     std::vector<ConnectionGene> _get_connections_out(int node_id);
 
@@ -66,10 +67,12 @@ private:
     std::vector<NodeGene> node_genes;
     std::set<int> node_ids;
     std::set<int> innov_nums;
-    // std::function<int> fitness;
-    // std::function<int> adjusted_fitness;
+    int fitness;
+    int adjusted_fitness;
     // species
     torch::Device device;
 };
+
+SHARED_HELPER(Genome);
 
 #endif  // GENOME_HPP_

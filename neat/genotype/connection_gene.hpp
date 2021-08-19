@@ -4,9 +4,13 @@
 #include <string>
 #include "torch/torch.h"
 
-class ConnectionGene {
+#include "neat/shared_helper.hpp"
+
+class ConnectionGeneImpl {
 public:
-    ConnectionGene(int in_node_id, int out_node_id, bool is_enabled, const torch::Device& device);
+    ConnectionGeneImpl();
+
+    ConnectionGeneImpl(int in_node_id, int out_node_id, bool is_enabled, const torch::Device& device);
 
     void set_weight(float new_weight);
 
@@ -16,7 +20,7 @@ public:
 
     int _get_correct_innovation_num();
 
-    bool operator==(const ConnectionGene& other) const;
+    bool operator==(const ConnectionGeneImpl& other) const;
 
     std::string str();
 
@@ -24,8 +28,10 @@ public:
     int out_node_id;
     bool is_enabled;
     int innov_num;
-    torch::Tensor weight;
+    torch::Tensor weight = {};
     torch::Device device;
 };
+
+SHARED_HELPER(ConnectionGene);
 
 #endif  // CONNECTION_GENE_HPP_

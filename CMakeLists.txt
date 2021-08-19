@@ -33,6 +33,7 @@ add_executable(neat-libtorch neat/main.cpp
                              neat/mutation.cpp
                              neat/unit.cpp
                              neat/utils.cpp
+                             neat/crossover.cpp
                              neat/genotype/connection_gene.cpp
                              neat/genotype/genome.cpp
                              neat/genotype/node_gene.cpp
