@@ -6,20 +6,24 @@
 
 #include "neat/genotype/node_gene.hpp"
 
-class UnitImpl: public torch::nn::Module {
+class UnitImpl {
 public:
+    UnitImpl();
+
     UnitImpl(const NodeGene& ref_node, size_t num_in_features);
 
-    void set_weights(const torch::Tensor& weights);
+    void set_weights(const std::vector<torch::Tensor>& weights);
 
     torch::nn::Linear build_linear(size_t num_in_features);
 
     std::string str();
 
+    bool operator==(const UnitImpl& other) const;
+
     NodeGene ref_node;
     torch::nn::Linear linear = nullptr;
 };
 
-TORCH_MODULE(Unit);
+SHARED_HELPER(Unit);
 
 #endif  // UNIT_HPP_

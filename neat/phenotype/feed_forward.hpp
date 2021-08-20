@@ -11,7 +11,7 @@
 
 class FeedForwardImpl: public torch::nn::Module  {
 public:
-    FeedForwardImpl(const Genome& genome,  std::shared_ptr<Config> config);
+    FeedForwardImpl(const Genome& genome,  std::shared_ptr<Config> config, const torch::Device& device);
 
     torch::Tensor forward(torch::Tensor x);
 
@@ -23,6 +23,7 @@ private:
     torch::nn::ModuleList lin_modules;
     std::shared_ptr<Config> config;
     std::function<torch::Tensor(const torch::Tensor&)> activation;
+    torch::Device device;
 };
 
 TORCH_MODULE(FeedForward);

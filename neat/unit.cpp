@@ -1,11 +1,15 @@
 #include "neat/unit.hpp"
 #include <vector>
 
-UnitImpl::UnitImpl(const NodeGene& ref_node, size_t num_in_features):ref_node(ref_node) {
-    linear = register_module("linear", build_linear(num_in_features));
+UnitImpl::UnitImpl() {
+    assert(false);
 }
 
-void UnitImpl::set_weights(const torch::Tensor& weights) {
+UnitImpl::UnitImpl(const NodeGene& ref_node, size_t num_in_features):ref_node(ref_node) {
+    linear = build_linear(num_in_features);
+}
+
+void UnitImpl::set_weights(const std::vector<torch::Tensor>& weights) {
     if ((ref_node->type != "imput") && (ref_node->type != "bias")) {
         torch::Tensor uweights = torch::cat(weights).unsqueeze(0);
         std::vector<torch::Tensor> param_vec = linear->parameters();
@@ -25,4 +29,8 @@ torch::nn::Linear UnitImpl::build_linear(size_t num_in_features) {
 
 std::string UnitImpl::str() {
     return "Reference Node: " + ref_node->str() + "\n";
+}
+
+bool UnitImpl::operator==(const UnitImpl& other) const {
+    return this == &other;
 }
