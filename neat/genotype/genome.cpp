@@ -41,11 +41,11 @@ void GenomeImpl::add_node_mutation() {
     existing_connection->is_enabled = false;
 }
 
-int GenomeImpl::get_num_excess_genes(GenomeImpl& other) {
+int GenomeImpl::get_num_excess_genes(Genome& other) {
     int num_excess = 0;
 
     int max_innov_num = -1;
-    for(auto it = other.innov_nums.begin() ; it != other.innov_nums.end() ; it++) {
+    for(auto it = other->innov_nums.begin() ; it != other->innov_nums.end() ; it++) {
         max_innov_num = std::max(*it, max_innov_num);
     }
     for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
@@ -55,10 +55,10 @@ int GenomeImpl::get_num_excess_genes(GenomeImpl& other) {
     }
 
     int max_node_id = -1;
-    for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
+    for(auto it = other->node_genes.begin() ; it != other->node_genes.end() ; it++) {
         max_node_id = std::max((*it)->id, max_node_id);
     }
-    for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
+    for(auto n = other->node_genes.begin() ; n != other->node_genes.end() ; n++) {
         if ((*n)->id > max_node_id) {
             num_excess += 1;
         }
@@ -67,30 +67,30 @@ int GenomeImpl::get_num_excess_genes(GenomeImpl& other) {
     return num_excess;
 }
 
-int GenomeImpl::get_num_disjoint_genes(GenomeImpl& other) {
+int GenomeImpl::get_num_disjoint_genes(Genome& other) {
     int num_disjoint = 0;
 
     int max_innov_num = -1;
-    for(auto it = other.innov_nums.begin() ; it != other.innov_nums.end() ; it++) {
+    for(auto it = other->innov_nums.begin() ; it != other->innov_nums.end() ; it++) {
         max_innov_num = std::max(*it, max_innov_num);
     }
     
     for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
         if ((*c_gene)->innov_num <= max_innov_num) {
-            if (other.get_connect_gene((*c_gene)->innov_num) == nullptr) {
+            if (other->get_connect_gene((*c_gene)->innov_num) == nullptr) {
                 num_disjoint += 1;
             }
         }
     }
 
     int max_node_id = -1;
-    for(auto it = other.node_genes.begin() ; it != other.node_genes.end() ; it++) {
+    for(auto it = other->node_genes.begin() ; it != other->node_genes.end() ; it++) {
         max_node_id = std::max((*it)->id, max_node_id);
     }
 
-    for(auto n = other.node_genes.begin() ; n != other.node_genes.end() ; n++) {
+    for(auto n = other->node_genes.begin() ; n != other->node_genes.end() ; n++) {
         if ((*n)->id <= max_node_id) {
-            if (other.get_node_gene((*n)->id).is_empty()) {
+            if (other->get_node_gene((*n)->id).is_empty()) {
                 num_disjoint += 1;
             }
         }
@@ -118,12 +118,12 @@ NodeGene GenomeImpl::get_node_gene(int id) {
     return NodeGene();  // nullptr
 }
 
-float GenomeImpl::get_avg_weight_difference(GenomeImpl& other) {
+float GenomeImpl::get_avg_weight_difference(Genome& other) {
     float weight_difference = 0.0;
     float num_weights = 0.0;
 
     for(auto c_gene = connection_genes.begin() ; c_gene != connection_genes.end() ; c_gene++) {
-        ConnectionGene matching_gene = other.get_connect_gene((*c_gene)->innov_num);
+        ConnectionGene matching_gene = other->get_connect_gene((*c_gene)->innov_num);
         if (matching_gene.is_empty()) {
             weight_difference += (*c_gene)->weight[0].item<float>() - matching_gene->weight[0].item<float>();
             num_weights += 1.0;

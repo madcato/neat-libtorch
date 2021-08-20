@@ -8,6 +8,8 @@
 #include "neat/genotype/connection_gene.hpp"
 #include "neat/genotype/node_gene.hpp"
 
+class Genome;
+
 class GenomeImpl {
 public:
     GenomeImpl();
@@ -18,15 +20,15 @@ public:
 
     void add_node_mutation();
 
-    int get_num_excess_genes(GenomeImpl& other);
+    int get_num_excess_genes(Genome& other);
 
-    int get_num_disjoint_genes(GenomeImpl& other);
+    int get_num_disjoint_genes(Genome& other);
 
     ConnectionGene get_connect_gene(int innov_num);
 
     NodeGene get_node_gene(int id);
 
-    float get_avg_weight_difference(GenomeImpl& other);
+    float get_avg_weight_difference(Genome& other);
 
     std::vector<int> get_inputs_ids(int node_id);
 
