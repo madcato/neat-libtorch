@@ -12,6 +12,8 @@ public:
 
     ConnectionGeneImpl(int in_node_id, int out_node_id, bool is_enabled, const torch::Device& device);
 
+    ConnectionGeneImpl* clone() const { return new ConnectionGeneImpl(*this); }
+
     void set_weight(float new_weight);
 
     void set_rand_weight();

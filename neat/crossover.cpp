@@ -16,13 +16,12 @@ Genome crossover(const Genome& genome_1, const Genome& genome_2, const std::shar
 
        if (!matching_gene.is_empty()) {
             if (rand_bool()) {
-                // TODO: implement this
-                // child_connection_gene = deepcopy(c_gene)
+                child_connection_gene = ConnectionGene((*c_gene)->clone());
             } else {
-                // child_connection_gene = deepcopy(matching_gene)
+                child_connection_gene = ConnectionGene(matching_gene->clone());
             }
         } else {
-            // child_connection_gene = deepcopy(c_gene)
+            child_connection_gene = ConnectionGene((*c_gene)->clone());
         }
 
         if (child_connection_gene->is_enabled) {
@@ -43,13 +42,12 @@ Genome crossover(const Genome& genome_1, const Genome& genome_2, const std::shar
 
         if (matching_gene.is_empty()) {
             if (rand_bool()) {
-                // TODO: implement this
-                // child_gene = deepcopy(n_gene)
+                child_gene = NodeGene((*c_gene)->clone());
             } else {
-                // child_gene = deepcopy(matching_gene)
+                child_gene = NodeGene(matching_gene->clone());
             }
         } else {
-            // child_gene = deepcopy(n_gene);
+            child_gene = NodeGene((*c_gene)->clone());
         }
 
         child->add_node_copy(child_gene);

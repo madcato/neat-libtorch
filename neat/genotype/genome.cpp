@@ -34,8 +34,9 @@ void GenomeImpl::add_node_mutation() {
     NodeGene new_node = add_node_gene("hidden");
     ConnectionGene existing_connection = _get_rand_connection_gene();
 
-    int weight = 1;
-    add_connection_gene(existing_connection->in_node_id, new_node->id, &weight);
+    float weight = 1;
+    float* pweight = &weight;
+    add_connection_gene(existing_connection->in_node_id, new_node->id, pweight);
     add_connection_gene(new_node->id, existing_connection->out_node_id, &(existing_connection->weight));
 
     existing_connection->is_enabled = false;

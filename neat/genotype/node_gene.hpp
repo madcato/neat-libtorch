@@ -11,6 +11,8 @@ public:
 
     NodeGeneImpl(int node_id, std::string node_type);
 
+    NodeGeneImpl* clone() const { return new NodeGeneImpl(*this); }
+
     bool operator==(const NodeGeneImpl& other) const;
     
     bool operator<(const NodeGeneImpl& other) const;

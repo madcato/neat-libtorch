@@ -1,5 +1,7 @@
 #include "neat/genotype/connection_gene.hpp"
 
+#include "neat/population.hpp"
+
 ConnectionGeneImpl::ConnectionGeneImpl():device(nullptr) {
     assert(false);  // Don't call this method
 }
@@ -24,15 +26,15 @@ void ConnectionGeneImpl::set_innov_sum(int num) {
 }
 
 int ConnectionGeneImpl::_get_correct_innovation_num() {
-    // TODO: translate this
-    // # This method keeps track of a generation's innovations
-    // for connect_gene in neat.population.Population.current_gen_innovation:
-    //         if self == connect_gene:
-    //             return connect_gene.innov_num
-    //     # Is new innovation
-    //     neat.population.Population.current_gen_innovation.append(self)
-    //     return neat.population.Population.get_new_innovation_num()
-    return 0;
+    for(auto it = PopulationImpl::current_gen_innovation.begin() ; it != PopulationImpl::current_gen_innovation.end() ; it++) {
+        ConnectionGene connect_gene = *it;
+        if(this == connect_gene.get()) {
+            return connect_gene->innov_num;
+        }
+    }
+    
+    PopulationImpl::current_gen_innovation.push_back(ConnectionGene(this));
+    return PopulationImpl::get_new_innovation_num();
 }
 
 bool ConnectionGeneImpl::operator==(const ConnectionGeneImpl& other) const {
