@@ -12,9 +12,9 @@ public:
 
     virtual bool verbose() = 0;
 
-    virtual int num_inputs() = 0;
+    virtual size_t num_inputs() = 0;
 
-    virtual int num_outputs() = 0;
+    virtual size_t num_outputs() = 0;
 
     virtual bool use_bias() = 0;
 
@@ -25,6 +25,8 @@ public:
     virtual float fitness_threshold() = 0;
 
     virtual size_t population_size() = 0;
+
+    virtual int number_of_generations() = 0;
 
     virtual float speciation_threshold() = 0;
 

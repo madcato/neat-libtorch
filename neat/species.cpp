@@ -52,7 +52,7 @@ std::vector<std::pair<Species, bool>> SpeciesImpl::stagnation(std::vector<Specie
         Genome genome = *(std::max_element(spec->members.begin(), spec->members.end(), genome_fitness_compare));
         spec->fitness = genome->fitness;
         spec->fitness_history.push_back(spec->fitness);
-        spec->adjusted_fitness = 0;
+        spec->adjusted_fitness = 0.0f;
 
         if (prev_fitness == 0 || spec->fitness > prev_fitness) {
             spec->last_improved = generation;
@@ -90,4 +90,8 @@ std::vector<std::pair<Species, bool>> SpeciesImpl::stagnation(std::vector<Specie
         i++;
     }
     return result;
+}
+
+bool SpeciesImpl::operator==(const SpeciesImpl& other) const {
+    return this == &other;
 }

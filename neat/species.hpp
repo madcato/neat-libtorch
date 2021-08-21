@@ -18,12 +18,14 @@ class SpeciesImpl {
 
     static std::vector<std::pair<Species, bool>> stagnation(std::vector<Species>& species, int generation);
 
+    bool operator==(const SpeciesImpl& other) const;
+
     int id;
     Genome model_genome;
     std::vector<Genome> members;
     std::vector<int> fitness_history;
     int fitness;
-    int adjusted_fitness;
+    float adjusted_fitness;
     int last_improved;
 };
 

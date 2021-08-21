@@ -70,8 +70,8 @@ public:
     std::set<int> node_ids;
     std::set<int> innov_nums;
     int fitness;
-    int adjusted_fitness;
-    // species
+    float adjusted_fitness;
+    int species;
     torch::Device device;
 };
 
