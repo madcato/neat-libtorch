@@ -14,3 +14,7 @@ bool rand_bool() {
 int rand(int min, int max) {
     return min + (std::rand() % static_cast<int>(max - min + 1));
 }
+
+float rand(float min, float max) {
+    return min + static_cast <float>(std::rand() / static_cast<float>(RAND_MAX / max - min ));
+}

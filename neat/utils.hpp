@@ -1,9 +1,19 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <vector>
+
 float rand_uni_val();
 bool rand_bool();
 int rand(int min, int max);
+float rand(float min, float max);
+
+template <typename T>
+T choice(const std::vector<T>& array) {
+    int pos = rand(0, array.size() - 1);
+    return array[pos];
+}
+
 
 // TODO: implement it
 // def get_best_genome(population):

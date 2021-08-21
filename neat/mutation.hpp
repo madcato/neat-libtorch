@@ -6,6 +6,6 @@
 #include "neat/experiments/config.hpp"
 #include "neat/genotype/genome.hpp"
 
-void mutate(const Genome& genome,  std::shared_ptr<Config> config);
+void mutate(Genome& genome,  std::shared_ptr<Config> config);
 
 #endif  // MUTATION_HPP_
