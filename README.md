@@ -6,7 +6,7 @@ This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://git
 
 NOT FINISHED YET. 
 
-THIS IS AN EXAMPLE OF BLOATED MES C++ CODE.
+THIS IS AN EXAMPLE OF BLOATED MESS OF C++ CODE.
 
 ![elon tweet about C++ bloated mess code](img/elon-musk-tweet-about-c.png)
 
