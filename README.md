@@ -4,7 +4,11 @@ C++ NEAT implementation using LibTorch.
 
 This project is a C++ translation of [github(ddehueck/pytorch-neat)](https://github.com/ddehueck/pytorch-neat).
 
-NOT FINISHED YET
+NOT FINISHED YET. 
+
+THIS IS AN EXAMPLE OF BLOATED MES C++ CODE.
+
+![elon tweet about C++ bloated mess code](img/elon-musk-tweet-about-c.png)
 
 ## Documentation
 
